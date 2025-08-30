@@ -1,6 +1,7 @@
 # Frequency-Aware Data-Driven Curve Estimation (FaCE) (AAAI submission)
 
 
+![FaCE main figure](https://raw.githubusercontent.com/AAAI-Anonymous-FaCE/FaCE/main/figures/main_figure.jpg)
 
 
 ## Repo layout
