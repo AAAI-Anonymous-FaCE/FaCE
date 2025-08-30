@@ -1,6 +1,7 @@
-# FaCE: Frequency-domain Clustering for Illumination Enhancement (AAAI submission)
+# Frequency-Aware Data-Driven Curve Estimation (FaCE) (AAAI submission)
 
-> **Repository**: split, professional layout. Core method unchanged. Includes a strict paper-faithful mode and an optional numerically-stabilized mode.
+
+
 
 ## Repo layout
 ```
@@ -11,7 +12,6 @@ face/                # Python package
 scripts/             # Convenience launchers (Win/Linux)
 docs/                # Alignment, privacy, governance, ethics (skeletons)
 tests/               # Smoke tests
-examples/            # Example configs (optional)
 ```
 
 ## Install
