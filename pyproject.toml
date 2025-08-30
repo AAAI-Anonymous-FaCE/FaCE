@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "face-aaai"
+version = "0.1.0"
+description = "FaCE: Frequency-domain Clustering for Illumination Enhancement"
+authors = [{name="FaCE Authors"}]
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = ["numpy", "opencv-python", "Pillow", "torch", "tqdm", "scikit-learn"]
+
+[project.scripts]
+face = "face.cli:main"
