@@ -1,8 +1,6 @@
-# Alignment with Paper · 代码-论文对照（骨架）
+# Alignment with Paper · Code–Paper Correspondence (Outline)
 
-- MR(u,v) = log(1 + |M(u,v)|): `core.PreFaCE_opt` -> variable `MR`  → 调试图 `*_MR.png`
-- ΔM: cluster mean deviation per frequency cluster → `dM` → 调试图 `*_dM.png`
-- LP(u,v): low-pass illumination prior → `LP` → 调试图 `*_LP.png`
-- L_enh: optimized illumination → `L_enh` → 调试图 `*_L.png`
-
-> TODO: 将以上对应到你的论文**精确公式编号**（Eq. X）。
+- MR(u,v) = log(1 + |M(u,v)|): `core.PreFaCE_opt` -> variable `MR`  → Debug Visualizations `*_MR.png`→ Eq. (7) (continuous); Eq. (24) (discrete)
+- ΔM: cluster mean deviation per frequency cluster → `dM` → Debug Visualizations `*_dM.png`→ Eq. (11) (continuous); Eq. (28) (discrete)
+- LP(u,v): low-pass illumination prior → `LP` → Debug Visualizations `*_LP.png`→ Eq. (13) (continuous); Eq. (30) (discrete)
+- L_enh: optimized illumination → `L_enh` → Debug Visualizations `*_L.png`→ Eq. (31) (discrete); conceptual illumination enhancement statement is Eq. (4) (continuous)
