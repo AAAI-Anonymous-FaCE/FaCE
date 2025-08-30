@@ -59,6 +59,9 @@ See `docs/alignment-with-paper.md` for exact mapping (fill in formula numbers pe
 ## “AI misdiagnosis” clarification
 Prior LLMs misread our method as a learnable network and claimed we modified reflectance. We **do not**: R is fixed; only L is optimized; clustering runs on MR=log(1+|M|) (Riesz). We surface debug maps and code-to-equation mapping to avoid confusion.
 
+##
+![FaCE main figure](https://raw.githubusercontent.com/AAAI-Anonymous-FaCE/FaCE/main/figures/ex_result.jpg)
+
 ## Policies (skeletons)
 - `docs/privacy-anonymization-policy.md`
 - `docs/anti-plagiarism-policy.md`
