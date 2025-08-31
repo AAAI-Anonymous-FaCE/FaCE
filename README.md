@@ -6,11 +6,84 @@
 Overall pipeline of our proposed FaCE framework. FaCE innovatively leverages the MFT to perform data-driven spectral-domain clustering, effectively capturing joint amplitude and phase spectral characteristics. The derived enhancement curve robustly reconstructs enhanced images from low-light inputs in a mathematically rigorous, unsupervised manner, significantly improving interpretability and visual quality over existing frequency-domain methods.
 
 
-### Emphasize two points：
+### Emphasize 3 points：
 1）We never optimize reflectance. We only adjust illumination (via luminance/log-luminance) and rebuild the image with unchanged chroma, which is equivalent to keeping 𝑅 fixed.
 
 2）Input low-light I (not L)  --> (Eq.7 on I) estimate W  --> apply operator T to luminance/log-luminance (illumination only)
                       keep chroma (I / Y) unchanged --> replace luminance with the enhanced one --> output I_enh
+
+3） We use I=R⋅L purely as a modeling convention. In practice, we derive an illumination proxy from the input (luminance/log-luminance), keep chroma unchanged (thereby treating reflectance as fixed), and apply a fixed frequency-domain operator only to the illumination proxy. Eq. (7) is evaluated on the observed low-light input to estimate spectral weights; this does not imply we modify reflectance or perform intrinsic decomposition.    
+
+
+### How `I` links to `L` and `R` (what the code actually does)
+
+We use `I = R * L` as a **modeling convention** to separate appearance into:
+- **reflectance-like** (color ratios / chroma), and
+- **illumination-like** (brightness).
+
+In code we derive both **from the same input `I`**:
+
+- **Illumination proxy.**  
+  `Y = rgb_to_luminance(I)` → `L_hat = log(eps + Y)` (or use `Y` directly).  
+  This is the **only** branch we enhance.
+
+- **Chroma (reflectance-like).**  
+  `C = I / (Y + eps)` (element-wise).  
+  We keep `C` **fixed** during reconstruction → effectively **do not modify reflectance (`R`)**.
+
+- **Reconstruction.**  
+  After enhancing illumination only, write it back with chroma unchanged:  
+  `I_enh = C * Y_enh` (or `C * exp(L_hat_enh)` if you work in log space).
+
+> **Takeaway:** We never estimate or edit a stand-alone `R`. Chroma is preserved, so reflectance is operationally fixed; we only adjust illumination.
+
+---
+
+### What Eq.(7) is computed on (and why)
+
+- **Eq.(7) is computed on the observed low-light input `I_low`.**  
+  Purpose: estimate **data-driven spectral weights** `W(u,v)` **from the input you want to enhance**.
+
+- Those weights parameterize a **fixed frequency-domain operator** `T`, which we then apply **only to the illumination proxy** (`L_hat`), not to chroma.
+
+**Short version:**  
+`Eq.(7) on I_low → W → apply T to L_hat only → rebuild with fixed chroma → I_enh`.
+
+---
+
+### Minimal code path (exact steps)
+
+```python
+# Input
+# I: float tensor [H, W, 3] in [0,1]
+
+# 1) From I → illumination proxy (L_hat) and chroma (C)
+Y     = rgb_to_luminance(I)                 # illumination-like
+L_hat = torch.log(eps + Y)                  # illumination proxy (log luminance)
+C     = I / (Y.unsqueeze(-1) + eps)         # reflectance-like (kept fixed)
+
+# 2) Eq.(7) on the observed low-light input I → spectral weights W(u,v)
+W_alpha = build_W_from_I(I, a=a1, b=b1)     # MR = log1p(|FFT(Y)|) → mean-center → sigmoid
+W_beta  = build_W_from_I(I, a=a2, b=b2)
+LP      = gaussian_lowpass_like(W_alpha, sigma_frac=lp_sigma_frac)
+
+# 3) Fixed frequency-domain operator T, applied ONLY to illumination (L_hat)
+def T(X, W):
+    F  = torch.fft.rfft2(X, norm="ortho")
+    FX = F * W * LP                          # element-wise in frequency domain
+    return torch.fft.irfft2(FX, s=None, norm="ortho")
+
+L_enh_a = T(L_hat, W_alpha)
+L_enh_b = T(L_hat, W_beta)
+
+# 4) Write illumination back with chroma fixed (reflectance unchanged)
+Y_enh_a = torch.exp(L_enh_a)                 # if you worked in log space
+Y_enh_b = torch.exp(L_enh_b)
+I_a     = C * Y_enh_a.unsqueeze(-1)          # chroma preserved
+I_b     = C * Y_enh_b.unsqueeze(-1)
+
+# 5) (Optional) choose a mix between two strengths
+I_enh = I_a  # or small search over alpha in [0,1]: I_enh = alpha*I_a + (1-alpha)*I_b
 
 
 
