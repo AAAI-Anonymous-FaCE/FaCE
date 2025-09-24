@@ -1,7 +1,7 @@
-# Frequency-Aware Data-Driven Curve Estimation (FaCE) (AAAI submission)
+# Frequency-Aware Convex Enhancement (FaCE) (ICLR2026 submission)
 
 
-![FaCE main figure](https://raw.githubusercontent.com/AAAI-Anonymous-FaCE/FaCE/main/figures/main_figure.jpg)
+![FaCE main figure](https://raw.githubusercontent.com/iclr-Anonymous-FaCE/FaCE/main/figures/main_figure.jpg)
 
 Overall pipeline of our proposed FaCE framework. FaCE innovatively leverages the MFT to perform data-driven spectral-domain clustering, effectively capturing joint amplitude and phase spectral characteristics. The derived enhancement curve robustly reconstructs enhanced images from low-light inputs in a mathematically rigorous, unsupervised manner, significantly improving interpretability and visual quality over existing frequency-domain methods.
 
@@ -108,10 +108,10 @@ pip install -e .
 ## Quick start
 ```bash
 # Windows (opt, with debug images)
-scripts\face_opt_win.bat D:\AAAI26_DATA\datasets\LOL_v1\eval15\low D:\AAAI26_DATA\datasets\LOL_v1\eval15\FaCE_out
+scripts\face_opt_win.bat D:\iclr26_DATA\datasets\LOL_v1\eval15\low D:\iclr26_DATA\datasets\LOL_v1\eval15\FaCE_out
 
 # Windows (strict, paper-faithful)
-scripts\face_strict_win.bat D:\AAAI26_DATA\datasets\LOL_v1\eval15\low D:\AAAI26_DATA\datasets\LOL_v1\eval15\FaCE_out
+scripts\face_strict_win.bat D:\iclr26_DATA\datasets\LOL_v1\eval15\low D:\iclr26_DATA\datasets\LOL_v1\eval15\FaCE_out
 
 # Linux/Mac
 ./scripts/run_face.sh <input_dir> <output_dir> [strict|opt]
@@ -143,7 +143,7 @@ See `docs/alignment-with-paper.md` for exact mapping (fill in formula numbers pe
 Some readers may initially interpret our approach as a learnable network that alters reflectance. It is not. FaCE computes spectral weights from the observed image and applies a fixed frequency-domain operator to illumination only (via luminance/log-luminance). Reflectance is kept unchanged by preserving chroma during reconstruction. R is fixed; only L is optimized; clustering runs on MR=log(1+|M|) (Riesz). We surface debug maps and code-to-equation mapping to avoid confusion.
 
 ##
-![FaCE main figure](https://raw.githubusercontent.com/AAAI-Anonymous-FaCE/FaCE/main/figures/ex_result.jpg)
+![FaCE main figure](https://raw.githubusercontent.com/iclr-Anonymous-FaCE/FaCE/main/figures/ex_result.jpg)
 
 Overview of FaCE: Data-driven spectral weighting from the observed MFT magnitude for illumination-only enhancement and chroma-preserving reconstruction
 （Pipeline nodes: low-light input, MFT magnitude, cluster-mean difference, low-pass filter, enhanced illumination, FaCE output vs. ground truth).
