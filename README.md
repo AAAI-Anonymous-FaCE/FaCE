@@ -143,7 +143,7 @@ See `docs/alignment-with-paper.md` for exact mapping (fill in formula numbers pe
 Some readers may initially interpret our approach as a learnable network that alters reflectance. It is not. FaCE computes spectral weights from the observed image and applies a fixed frequency-domain operator to illumination only (via luminance/log-luminance). Reflectance is kept unchanged by preserving chroma during reconstruction. R is fixed; only L is optimized; clustering runs on MR=log(1+|M|) (Riesz). We surface debug maps and code-to-equation mapping to avoid confusion.
 
 ##
-![FaCE main figure](https://raw.githubusercontent.com/iclr26-Anonymous-FaCE/FaCE/main/figures/ex_result.jpg)
+![FaCE main figure](https://raw.githubusercontent.com/iclr26/FaCE/main/figures/ex_result.jpg)
 
 Overview of FaCE: Data-driven spectral weighting from the observed MFT magnitude for illumination-only enhancement and chroma-preserving reconstruction
 （Pipeline nodes: low-light input, MFT magnitude, cluster-mean difference, low-pass filter, enhanced illumination, FaCE output vs. ground truth).
