@@ -1,7 +1,7 @@
 # Frequency-Aware Convex Enhancement (FaCE) (ICLR2026 submission)
 
 
-![FaCE main figure](https://raw.githubusercontent.com/iclr26-Anonymous-FaCE/FaCE/main/figures/main_figure.jpg)
+![FaCE main figure](https://raw.githubusercontent.com/iclr26/FaCE/main/figures/main_figure.jpg)
 
 Overall pipeline of our proposed FaCE framework. FaCE innovatively leverages the MFT to perform data-driven spectral-domain clustering, effectively capturing joint amplitude and phase spectral characteristics. The derived enhancement curve robustly reconstructs enhanced images from low-light inputs in a mathematically rigorous, unsupervised manner, significantly improving interpretability and visual quality over existing frequency-domain methods.
 
