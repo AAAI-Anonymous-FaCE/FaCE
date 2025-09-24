@@ -9,10 +9,10 @@ Overall pipeline of our proposed FaCE framework. FaCE innovatively leverages the
 ### Emphasize 3 points：
 1）We never optimize reflectance. We only adjust illumination (via luminance/log-luminance) and rebuild the image with unchanged chroma, which is equivalent to keeping 𝑅 fixed.
 
-2）Input low-light I (not L)  --> (Eq.7 on I) estimate W  --> apply operator T to luminance/log-luminance (illumination only)
+2）Input low-light I (not L)  --> (Eq.6 on I) estimate W  --> apply operator T to luminance/log-luminance (illumination only)
                       keep chroma (I / Y) unchanged --> replace luminance with the enhanced one --> output I_enh
 
-3） We use I=R⋅L purely as a modeling convention. In practice, we derive an illumination proxy from the input (luminance/log-luminance), keep chroma unchanged (thereby treating reflectance as fixed), and apply a fixed frequency-domain operator only to the illumination proxy. Eq. (7) is evaluated on the observed low-light input to estimate spectral weights; this does not imply we modify reflectance or perform intrinsic decomposition.    
+3） We use I=R⋅L purely as a modeling convention. In practice, we derive an illumination proxy from the input (luminance/log-luminance), keep chroma unchanged (thereby treating reflectance as fixed), and apply a fixed frequency-domain operator only to the illumination proxy. Eq. (5) is evaluated on the observed low-light input to estimate spectral weights; this does not imply we modify reflectance or perform intrinsic decomposition.    
 
 
 ### How `I` links to `L` and `R` (what the code actually does)
@@ -39,15 +39,15 @@ In code we derive both **from the same input `I`**:
 
 ---
 
-### What Eq.(7) is computed on (and why)
+### What Eq.(6) is computed on (and why)
 
-- **Eq.(7) is computed on the observed low-light input `I_low`.**  
+- **Eq.(6) is computed on the observed low-light input `I_low`.**  
   Purpose: estimate **data-driven spectral weights** `W(u,v)` **from the input you want to enhance**.
 
 - Those weights parameterize a **fixed frequency-domain operator** `T`, which we then apply **only to the illumination proxy** (`L_hat`), not to chroma.
 
 **Short version:**  
-`Eq.(7) on I_low → W → apply T to L_hat only → rebuild with fixed chroma → I_enh`.
+`Eq.(6) on I_low → W → apply T to L_hat only → rebuild with fixed chroma → I_enh`.
 
 ---
 
@@ -62,7 +62,7 @@ Y     = rgb_to_luminance(I)                 # illumination-like
 L_hat = torch.log(eps + Y)                  # illumination proxy (log luminance)
 C     = I / (Y.unsqueeze(-1) + eps)         # reflectance-like (kept fixed)
 
-# 2) Eq.(7) on the observed low-light input I → spectral weights W(u,v)
+# 2) Eq.(6) on the observed low-light input I → spectral weights W(u,v)
 W_alpha = build_W_from_I(I, a=a1, b=b1)     # MR = log1p(|FFT(Y)|) → mean-center → sigmoid
 W_beta  = build_W_from_I(I, a=a2, b=b2)
 LP      = gaussian_lowpass_like(W_alpha, sigma_frac=lp_sigma_frac)
